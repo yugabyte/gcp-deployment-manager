@@ -1,0 +1,16 @@
+resources:
+- type: compute.v1.network
+  name: {{ env["name"] }}
+  properties:
+     autoCreateSubnetworks: false
+# Create subnetworks
+{% for subnet in properties["subnets"] %}
+  {% set name = subnet["name"] %}
+  {% set range = subnet["range"] %}
+- type: compute.v1.subnetwork
+  name: {{ name }}
+  properties:
+    network: $(ref.{{ env["name"] }}.selfLink)
+    ipCidrRange: {{ range }}
+    region: {{ properties["region"] }}
+{% endfor %}

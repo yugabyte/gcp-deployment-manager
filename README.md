@@ -16,7 +16,7 @@ This repo is ideal to get you running a YugaByte cluster in a few steps.
     ```
     $ gcloud deployment-manager deployments create <your-deployment-name> --config=yugabyte-deployment.yaml
     ```
-  - Wait for a few minutes after the creation of all resources is complete by the above command.
+  - Wait for 5-10 minutes after the creation of all resources is complete by the above command.
   - Once the deployment creation is complete, you can describe it as shown below.
     ```
     $ gcloud deployment-manager deployments describe <your-deployment-name>

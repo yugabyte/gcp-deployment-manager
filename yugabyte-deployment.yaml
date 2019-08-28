@@ -88,9 +88,6 @@ resources:
       startup-script: startup-script.sh
       create-universe: create_universe.sh
     metadata:
-      yb-version: 1.3.0.0
-      yb-region: "us-central1"
-      replication-factor: 3
       in-address-0: $(ref.in-address-0.address)
       in-address-1: $(ref.in-address-1.address)
       in-address-2: $(ref.in-address-2.address)
@@ -108,9 +105,6 @@ resources:
       startup-script: startup-script.sh
       create-universe: create_universe.sh
     metadata:
-      yb-version: 1.3.0.0
-      yb-region: "us-central1"
-      replication-factor: 3
       in-address-0: $(ref.in-address-0.address)
       in-address-1: $(ref.in-address-1.address)
       in-address-2: $(ref.in-address-2.address)    
@@ -128,9 +122,6 @@ resources:
       startup-script: startup-script.sh
       create-universe: create_universe.sh
     metadata:
-      yb-version: 1.3.0.0
-      yb-region: "us-central1"
-      replication-factor: 3
       in-address-0: $(ref.in-address-0.address)
       in-address-1: $(ref.in-address-1.address)
       in-address-2: $(ref.in-address-2.address)

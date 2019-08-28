@@ -36,7 +36,7 @@ node_num=0
 
 for node in $NODES
 do
-    if [ -z $YB_MASTER_ADDRESSES]; then
+    if [ -z $YB_MASTER_ADDRESSES ]; then
         YB_MASTER_ADDRESSES="$node:7100"
     else       
         YB_MASTER_ADDRESSES="$YB_MASTER_ADDRESSES,$node:7100"
@@ -49,6 +49,8 @@ done
 # Setup master addresses across all the nodes.
 ###############################################################################
 echo "Finalizing configuration..."
+echo "--fs_data_dirs=${YB_HOME}/data/disk0,${YB_HOME}/data/disk1" >> ${YB_HOME}/master/conf/server.conf
+echo "--fs_data_dirs=${YB_HOME}/data/disk0,${YB_HOME}/data/disk1" >> ${YB_HOME}/tserver/conf/server.conf
 echo "--master_addresses=${YB_MASTER_ADDRESSES}" >> ${YB_HOME}/master/conf/server.conf
 echo "--tserver_master_addrs=${YB_MASTER_ADDRESSES}" >> ${YB_HOME}/tserver/conf/server.conf
 echo "--replication_factor=${RF}" >> ${YB_HOME}/master/conf/server.conf
@@ -93,7 +95,7 @@ nohup ${MASTER_EXE} --flagfile ${YB_HOME}/master/conf/server.conf >>${MASTER_OUT
   if [[ "$MASTER_CRON_OK" == *${MASTER_CRON_PATTERN}* ]]; then
     echo "Found master crontab entry at [$node]"
   else
-    crontab -l | { cat; echo "*/3 * * * * /home/ec2-user/start_master.sh > /dev/null 2>&1"; } | crontab - 
+    crontab -l | { cat; echo "*/3 * * * * /home/${USER}/start_master.sh > /dev/null 2>&1"; } | crontab - 
     echo "Created master crontab entry at [$node]"
   fi
 
@@ -121,6 +123,6 @@ nohup ${TSERVER_EXE} --flagfile ${YB_HOME}/tserver/conf/server.conf >>${TSERVER_
   if [[ "$TSERVER_CRON_OK" == *${TSERVER_CRON_PATTERN}* ]]; then
      echo "Found tserver crontab entry at [$node]"
   else
-     crontab -l | { cat; echo "*/3 * * * * /home/ec2-user/start_tserver.sh > /dev/null 2>&1"; } | crontab - 
+     crontab -l | { cat; echo "*/3 * * * * /home/${USER}/start_tserver.sh > /dev/null 2>&1"; } | crontab - 
      echo "Created tserver crontab entry at [$node]"
   fi

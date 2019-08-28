@@ -14,9 +14,6 @@ NODE_1_IP=$(curl 'http://metadata.google.internal/computeMetadata/v1/instance/at
 NODE_2_IP=$(curl 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/in-address-1' -H 'Metadata-Flavor: Google')
 NODE_3_IP=$(curl 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/in-address-2' -H 'Metadata-Flavor: Google')
 
-sed -i 's/-ce//g' /home/$USER/install_software.sh  
-sed -i 's/1.2.8.0/1.3.0.0/g' /home/$USER/install_software.sh  
-
 yum install wget -y
 if [ $? -eq 0 ]; then
         echo -e "Wget installed"
@@ -24,7 +21,7 @@ else
         echo -e "Wget failed to install"
         exit 1
 fi
-bash /home/$USER/install_software.sh 
+bash /home/$USER/install_software.sh $YB_VERSION
 if [ $? -eq 0 ]; then
         echo -e "YugaByte DB installed"
 else

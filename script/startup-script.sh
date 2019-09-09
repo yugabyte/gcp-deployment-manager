@@ -14,6 +14,10 @@ NODE_1_IP=$(curl 'http://metadata.google.internal/computeMetadata/v1/instance/at
 NODE_2_IP=$(curl 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/in-address-1' -H 'Metadata-Flavor: Google')
 NODE_3_IP=$(curl 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/in-address-2' -H 'Metadata-Flavor: Google')
 
+mkdir -p /home/$USER/yugabyte-db/data
+sudo mkfs -t ext4 -F /dev/sdb
+sudo mount  /dev/sdb /home/$USER/yugabyte-db/data
+
 yum install wget -y
 if [ $? -eq 0 ]; then
         echo -e "Wget installed"

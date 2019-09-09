@@ -9,7 +9,7 @@ imports:
     name: create_universe.sh
 
 resources:
-- name: yubagyte-network
+- name: yugabyte-network
   type: network.jinja
   properties:
     region: us-central1
@@ -46,7 +46,7 @@ resources:
 - name: yb-firewall-rule
   type: compute.v1.firewall
   properties:
-    network: $(ref.yubagyte-network.selfLink)
+    network: $(ref.yugabyte-network.selfLink)
     allowed: 
     - IPProtocol: 'TCP'
       ports: ['7000','9000','22']
@@ -55,7 +55,7 @@ resources:
 - name: yb-intra-firewall-rule
   type: compute.v1.firewall
   properties:
-    network: $(ref.yubagyte-network.selfLink)
+    network: $(ref.yugabyte-network.selfLink)
     allowed: 
     - IPProtocol: 'TCP'
       ports: ['7100','9100', '6379', '5433', '9042']

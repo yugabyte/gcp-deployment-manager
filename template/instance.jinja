@@ -1,0 +1,44 @@
+resources:
+- type: compute.v1.instance
+  name: {{ env["name"] }}
+  properties:
+     machineType: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+     zone: {{ properties["zone"] }}
+     networkInterfaces:
+       - network: $(ref.yugabyte-network.selfLink)
+         subnetwork: $(ref.{{ properties["subnetwork"] }}.selfLink)
+         networkIP: $(ref.{{ properties["in-address"] }}.address)
+         accessConfigs: [natIP: $(ref.{{ properties["ex-address"] }}.address)]
+     disks:
+      - deviceName: boot
+        type: PERSISTENT
+        boot: true
+        autoDelete: true
+        initializeParams:
+          diskName: boot
+          sourceImage: https://www.googleapis.com/compute/v1/projects/centos-cloud/global/images/family/centos-7
+          diskSizeGb: 10
+      - deviceName: yb-disk
+        type: PERSISTENT
+        boot: flase
+        autoDelete: true
+        initializeParams:
+           diskName: yb-disk
+           diskSizeGb: 50
+     metadata:
+      items:
+      -  key: "yb-version" 
+         value: "1.3.0.0" 
+      -  key: "yb-region"
+         value: "us-central1"
+      -  key: "replication-factor"
+         value: "3"
+      {% for key, value in properties['metadata-from-file'].iteritems() %}
+      - key: {{ key }}
+        value: |
+          {{ imports[value]|indent(10) }}
+    {% endfor %}
+      {% for key, value in properties['metadata'].iteritems() %}
+      - key: {{ key }}
+        value: {{ value }}
+    {% endfor %}

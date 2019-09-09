@@ -1,0 +1,140 @@
+imports:
+  - path: ./template/network.jinja
+    name: network.jinja
+  - path: ./template/instance.jinja
+    name: instance.jinja
+  - path: ./script/startup-script.sh
+    name: startup-script.sh
+  - path: ./script/create_universe.sh
+    name: create_universe.sh
+
+resources:
+- name: yugabyte-network
+  type: network.jinja
+  properties:
+    region: us-central1
+    subnets:
+      - range: 10.0.1.0/24
+        name: subnet-1
+      - range: 10.0.2.0/24
+        name: subnet-2
+      - range: 10.0.3.0/24
+        name: subnet-3
+
+- type: compute.v1.address
+  name: in-address-0
+  properties:
+    region: us-central1
+    addressType: INTERNAL
+    subnetwork: $(ref.subnet-1.selfLink)
+
+- type: compute.v1.address
+  name: in-address-1
+  properties:
+    region: us-central1
+    addressType: INTERNAL
+    subnetwork: $(ref.subnet-2.selfLink)
+
+- type: compute.v1.address
+  name: in-address-2
+  properties:
+    region: us-central1
+    addressType: INTERNAL
+    subnetwork: $(ref.subnet-3.selfLink)
+
+
+- name: yb-firewall-rule
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.yugabyte-network.selfLink)
+    allowed: 
+    - IPProtocol: 'TCP'
+      ports: ['7000','9000','22']
+    sourceRanges: ['0.0.0.0/0']
+
+- name: yb-intra-firewall-rule
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.yugabyte-network.selfLink)
+    allowed: 
+    - IPProtocol: 'TCP'
+      ports: ['7100','9100', '6379', '5433', '9042']
+    sourceRanges: ['10.0.0.0/16']
+
+- type: compute.v1.address
+  name: ip-address-0
+  properties:
+    region: us-central1
+    
+- type: compute.v1.address
+  name: ip-address-1
+  properties:
+    region: us-central1
+    
+- type: compute.v1.address
+  name: ip-address-2
+  properties:
+    region: us-central1
+    
+- name: yb-instance-1
+  type: instance.jinja
+  properties:
+    zone: us-central1-a
+    machineType: g1-small 
+    subnetwork: subnet-1
+    in-address: in-address-0
+    ex-address: ip-address-0
+    metadata-from-file:
+      startup-script: startup-script.sh
+      create-universe: create_universe.sh
+    metadata:
+      in-address-0: $(ref.in-address-0.address)
+      in-address-1: $(ref.in-address-1.address)
+      in-address-2: $(ref.in-address-2.address)
+      dependsOn: $(ref.in-address-0.address)
+
+- name: yb-instance-2
+  type: instance.jinja
+  properties:
+    zone: us-central1-b
+    machineType: g1-small 
+    subnetwork: subnet-2
+    in-address: in-address-1
+    ex-address: ip-address-1
+    metadata-from-file:
+      startup-script: startup-script.sh
+      create-universe: create_universe.sh
+    metadata:
+      in-address-0: $(ref.in-address-0.address)
+      in-address-1: $(ref.in-address-1.address)
+      in-address-2: $(ref.in-address-2.address)    
+      dependsOn: $(ref.in-address-1.address)  
+
+- name: yb-instance-3
+  type: instance.jinja
+  properties:
+    zone: us-central1-c
+    machineType: g1-small 
+    subnetwork: subnet-3    
+    in-address: in-address-2
+    ex-address: ip-address-2
+    metadata-from-file:
+      startup-script: startup-script.sh
+      create-universe: create_universe.sh
+    metadata:
+      in-address-0: $(ref.in-address-0.address)
+      in-address-1: $(ref.in-address-1.address)
+      in-address-2: $(ref.in-address-2.address)
+      dependsOn: $(ref.in-address-2.address)  
+      
+outputs:
+- name: UI
+  value: http://$(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP):7000
+- name: JDBC
+  value: postgresql://postgres@$(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP):5433
+- name: YSQL
+  value: psql -U postgres -h $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) -p 5433
+- name: YCQL
+  value: cqlsh $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) 9042
+- name: YEDIS
+  value: redis-cli -h $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) -p 6379 

@@ -5,8 +5,8 @@ This repo is ideal to get you running a YugabyteDB cluster in a few steps.
 
 # Usage
 
-## Deploying From Google Cloud 
-[![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fyugabyte%2Fgcp-deployment-manager.git)
+## Deploying on Google Cloud 
+[![Open in Google Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fyugabyte%2Fgcp-deployment-manager.git)
   - First clone this repo.
     ```
     $ git clone https://github.com/yugabyte/gcp-deployment-manager.git
@@ -21,4 +21,4 @@ This repo is ideal to get you running a YugabyteDB cluster in a few steps.
     ```
     $ gcloud deployment-manager deployments describe <your-deployment-name>
     ```
-    In the output, you will get the YugabyteDB admin URL, JDBC URL, YSQL, YCQL and YEDIS connection string. You can use YugabyteDB admin URL to access admin portal. 
+    In the output, you will get the YugabyteDB admin URL, JDBC URL, YSQL, YCQL and YEDIS connection string. You can use the     admin URL to access admin portal. 

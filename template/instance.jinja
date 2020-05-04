@@ -17,7 +17,7 @@ resources:
         initializeParams:
           diskName: boot
           sourceImage: https://www.googleapis.com/compute/v1/projects/centos-cloud/global/images/family/centos-7
-          diskSizeGb: 10
+          diskSizeGb: 20
       - deviceName: yb-disk
         type: PERSISTENT
         boot: flase
@@ -28,7 +28,7 @@ resources:
      metadata:
       items:
       -  key: "yb-version" 
-         value: "2.1.2.0" 
+         value: "2.1.4.0"
       -  key: "yb-region"
          value: "us-central1"
       -  key: "replication-factor"

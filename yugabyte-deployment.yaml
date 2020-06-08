@@ -5,8 +5,6 @@ imports:
     name: instance.jinja
   - path: ./script/startup-script.sh
     name: startup-script.sh
-  - path: ./script/create_universe.sh
-    name: create_universe.sh
 
 resources:
 - name: yugabyte-network
@@ -86,7 +84,6 @@ resources:
     ex-address: ip-address-0
     metadata-from-file:
       startup-script: startup-script.sh
-      create-universe: create_universe.sh
     metadata:
       in-address-0: $(ref.in-address-0.address)
       in-address-1: $(ref.in-address-1.address)
@@ -103,7 +100,6 @@ resources:
     ex-address: ip-address-1
     metadata-from-file:
       startup-script: startup-script.sh
-      create-universe: create_universe.sh
     metadata:
       in-address-0: $(ref.in-address-0.address)
       in-address-1: $(ref.in-address-1.address)
@@ -120,7 +116,6 @@ resources:
     ex-address: ip-address-2
     metadata-from-file:
       startup-script: startup-script.sh
-      create-universe: create_universe.sh
     metadata:
       in-address-0: $(ref.in-address-0.address)
       in-address-1: $(ref.in-address-1.address)

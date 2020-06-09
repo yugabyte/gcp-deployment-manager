@@ -33,12 +33,12 @@ resources:
          value: "us-central1"
       -  key: "replication-factor"
          value: "3"
-      {% for key, value in properties['metadata-from-file'].iteritems() %}
+      {% for key, value in properties['metadata-from-file'].items() %}
       - key: {{ key }}
         value: |
           {{ imports[value]|indent(10) }}
-    {% endfor %}
-      {% for key, value in properties['metadata'].iteritems() %}
+      {% endfor %}
+      {% for key, value in properties['metadata'].items() %}
       - key: {{ key }}
         value: {{ value }}
-    {% endfor %}
+      {% endfor %}

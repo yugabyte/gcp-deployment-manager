@@ -126,10 +126,10 @@ outputs:
 - name: UI
   value: http://$(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP):7000
 - name: JDBC
-  value: postgresql://postgres@$(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP):5433
+  value: postgresql://yugabyte@$(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP):5433
 - name: YSQL
-  value: psql -U postgres -h $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) -p 5433
+  value: ysqlsh -U yugabyte -h $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) -p 5433
 - name: YCQL
-  value: cqlsh $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) 9042
+  value: ycqlsh $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) 9042
 - name: YEDIS
   value: redis-cli -h $(ref.yb-instance-1.networkInterfaces[0].accessConfigs[0].natIP) -p 6379 
